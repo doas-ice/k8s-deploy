@@ -3,7 +3,7 @@ kind: Service
 metadata:
   name: k8s-deploy-svc
 spec:
-  type: ClusterIP
+  type: NodePort
   selector:
     app: k8s-deploy
     tier: rolling
