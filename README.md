@@ -45,25 +45,92 @@ Ingress is used to expose the application outside the cluster with a single entr
 ```
 # Screenshots
 
-    Argo CD dashboard showing all three strategies
-    Running pods for each strategy (kubectl get pods)
-    Application in browser before and after update
+**Argo CD Dashboard**
+<img width="1860" height="1048" alt="argocd dash" src="https://github.com/user-attachments/assets/7fd7aabd-c832-4dba-99e7-71f41737cd94" />
+
+---
+
+**ArgoCD Rolling**
+<img width="1860" height="1048" alt="argocd rolling" src="https://github.com/user-attachments/assets/aaa45d47-9042-4ab3-aa4f-a1d139fec770" />
+
+---
+
+**ArgoCD Canary**
+<img width="1860" height="1048" alt="argocd canary" src="https://github.com/user-attachments/assets/11a01f24-58c9-4e36-8b86-038f2f6351e2" />
+
+---
+
+**ArgoCD Blue-Green**
+<img width="1860" height="1048" alt="argocd blue green" src="https://github.com/user-attachments/assets/80dbb815-fe38-4d32-91b1-7caad75049e2" />
+
+---
+
+**Running Pods**
+<img width="1133" height="750" alt="running pods" src="https://github.com/user-attachments/assets/25304f67-d41f-473a-ba5a-62aee71bc1be" />
+
+---
+
+**Rolling Before Update**
+<img width="1860" height="1045" alt="roll 1" src="https://github.com/user-attachments/assets/5f03357b-73c1-49bd-b757-3f880a62690a" />
+
+
+---
+
+**Rolling After Update**
+<img width="1860" height="1045" alt="roll 2" src="https://github.com/user-attachments/assets/4d458ca9-99b8-4370-b5e5-6877e2a45fe6" />
+
+
+---
+
+**Blue Green with Blue Selector**
+<img width="1861" height="1046" alt="blue" src="https://github.com/user-attachments/assets/f6a2cabf-1cd0-4e78-8f80-310f70eb89da" />
+
+
+---
+
+**Blue-Green with Green Selector**
+<img width="1861" height="1046" alt="green" src="https://github.com/user-attachments/assets/29841471-8e77-4317-aad8-a3f1982631fe" />
+
+
+---
+
+
+**Canary Deployment hitting Stable**
+<img width="1861" height="1046" alt="canary 1" src="https://github.com/user-attachments/assets/32d79371-7ba6-4f80-9bde-612cca57e023" />
+
+
+---
+
+
+**Canary Deployment hitting Canary**
+<img width="1861" height="1046" alt="canary 2" src="https://github.com/user-attachments/assets/9073a840-64c6-4cb5-897c-f5b59ab8fc6f" />
+
+
+---
+
+
+**Canary-Stable Splitting**
+<img width="797" height="439" alt="canary traffic-splitting" src="https://github.com/user-attachments/assets/73604ef5-849f-4e6a-a034-54bcc981e4fb" />
+
+
+---
+
 
 # Assignment Questions & Answers
 
 ## Q1. Explain the difference between a Kubernetes Service, an Ingress controller (e.g., NGINX Ingress), and a cloud provider’s load balancer (e.g., AWS ELB). Why do Kubernetes clusters often use multiple layers of load balancing instead of just one?
 
-    Kubernetes Service: A Service is an abstraction that defines a logical set of Pods and a policy to access them. It provides internal load balancing within the cluster and a stable IP/hostname for the Pods. For example, a Service ensures that if Pods are recreated or scaled up/down, other components can still reach the application reliably.
+- Kubernetes Service: A Service is an abstraction that defines a logical set of Pods and a policy to access them. It provides internal load balancing within the cluster and a stable IP/hostname for the Pods. For example, a Service ensures that if Pods are recreated or scaled up/down, other components can still reach the application reliably.
 
-    Ingress Controller (e.g., NGINX Ingress): An Ingress Controller manages external HTTP(S) traffic into the cluster. It allows you to define rules based on hostnames or paths to route traffic to specific Services. Unlike a Service, which only balances traffic inside the cluster, Ingress gives you a single entry point for multiple services, supports SSL/TLS termination, and can handle path-based routing.
+- Ingress Controller (e.g., NGINX Ingress): An Ingress Controller manages external HTTP(S) traffic into the cluster. It allows you to define rules based on hostnames or paths to route traffic to specific Services. Unlike a Service, which only balances traffic inside the cluster, Ingress gives you a single entry point for multiple services, supports SSL/TLS termination, and can handle path-based routing.
 
-    Cloud Load Balancer (e.g., AWS ELB/ALB): A cloud LB is an external load balancer managed by your cloud provider. It routes internet traffic to your cluster nodes or services. Unlike Kubernetes Services or Ingress, it exists outside the cluster and often has features like global distribution, health checks, and autoscaling.
+- Cloud Load Balancer (e.g., AWS ELB/ALB): A cloud LB is an external load balancer managed by your cloud provider. It routes internet traffic to your cluster nodes or services. Unlike Kubernetes Services or Ingress, it exists outside the cluster and often has features like global distribution, health checks, and autoscaling.
 
 Why multiple layers? Kubernetes often uses a stacked approach: Cloud LB → Ingress → Service → Pod. Each layer has a purpose:
 
-    Cloud LB handles external traffic and scales automatically.
-    Ingress provides fine-grained HTTP routing and TLS termination.
-    Service balances traffic internally across Pods.
+- Cloud LB handles external traffic and scales automatically.
+- Ingress provides fine-grained HTTP routing and TLS termination.
+- Service balances traffic internally across Pods.
 
 This separation allows flexibility, scalability, security, and observability, instead of relying on a single monolithic load balancer.
 
@@ -74,45 +141,45 @@ In a microservices architecture, exposing every Service as a LoadBalancer can qu
 
 Benefits of using an Ingress controller:
 
-    Single entry point for all services → easier DNS management.
-    Cost-efficient → fewer cloud load balancers needed.
-    Advanced routing → can route based on path, hostname, or even headers.
-    TLS termination → SSL certificates can be centralized.
+- Single entry point for all services → easier DNS management.
+- Cost-efficient → fewer cloud load balancers needed.
+- Advanced routing → can route based on path, hostname, or even headers.
+- TLS termination → SSL certificates can be centralized.
 
 Drawbacks / considerations:
 
-    Adds an extra layer of complexity; you need to manage and maintain the Ingress Controller.
-    Some features, like advanced traffic splitting by percentage, require additional tools (NGINX annotations, Service Mesh, or Argo Rollouts).
+Adds an extra layer of complexity; you need to manage and maintain the Ingress Controller.
+Some features, like advanced traffic splitting by percentage, require additional tools (NGINX annotations, Service Mesh, or Argo Rollouts).
 
 Overall, Ingress is preferred when you have many services and want centralized traffic control.
 
 
 ## Q3. Describe how Blue-Green and Canary deployment strategies influence traffic routing and load balancing within Kubernetes. Why can’t you simply rely on Kubernetes Services for sophisticated traffic splitting required by Canary deployments?
 
-    Blue-Green Deployment: You maintain two identical environments — Blue (current) and Green (new). All traffic is routed to Blue initially. When Green is ready, you switch 100% of traffic to Green by updating the Service or Ingress.
-        Pros: Instant rollback is simple; traffic is fully isolated.
-        Cons: Requires double the resources while both environments are running.
+- Blue-Green Deployment: You maintain two identical environments — Blue (current) and Green (new). All traffic is routed to Blue initially. When Green is ready, you switch 100% of traffic to Green by updating the Service or Ingress.
+  - Pros: Instant rollback is simple; traffic is fully isolated.
+  - Cons: Requires double the resources while both environments are running.
 
-    Canary Deployment: You release a new version (canary) to a small subset of traffic (e.g., 10%) while the majority continues hitting the stable version. Gradually, the canary traffic is increased until 100%.
-        Pros: Safer rollout; you can detect issues early.
-        Cons: Requires precise traffic routing and observability.
+- Canary Deployment: You release a new version (canary) to a small subset of traffic (e.g., 10%) while the majority continues hitting the stable version. Gradually, the canary traffic is increased until 100%.
+  - Pros: Safer rollout; you can detect issues early.
+  - Cons: Requires precise traffic routing and observability.
 
 Why Services alone are not enough for Canary: Kubernetes Services do evenly distribute traffic across all pods. They cannot split traffic by percentage or target only a subset of pods. Canary releases need either Ingress annotations or a Service Mesh to direct specific percentages of traffic to the new version.
 
 
 ## Q4. What are the advantages and disadvantages of using a cloud provider’s load balancer (such as AWS ELB/ALB) directly in front of Kubernetes clusters compared to using an Ingress controller or Service of type LoadBalancer?
 
-    Cloud Load Balancer (AWS ELB/ALB)
-        Pros: Managed, reliable, globally distributed, integrates with cloud networking.
-        Cons: Expensive if you need one per Service; less flexible routing for internal HTTP paths.
+- Cloud Load Balancer (AWS ELB/ALB)
+  - Pros: Managed, reliable, globally distributed, integrates with cloud networking.
+  - Cons: Expensive if you need one per Service; less flexible routing for internal HTTP paths.
 
-    Ingress Controller
-        Pros: Centralized entry, path/host routing, SSL termination, cost-effective.
-        Cons: Needs to be installed and maintained; some advanced features require extra setup.
+- Ingress Controller
+  - Pros: Centralized entry, path/host routing, SSL termination, cost-effective.
+  - Cons: Needs to be installed and maintained; some advanced features require extra setup.
 
-    Service of type LoadBalancer
-        Pros: Simple, cloud-native, easy to expose a service externally.
-        Cons: Creates one LB per service → can get costly; limited routing rules.
+ - Service of type LoadBalancer
+    - Pros: Simple, cloud-native, easy to expose a service externally.
+    - Cons: Creates one LB per service → can get costly; limited routing rules.
 
 Summary: Use cloud LB if you need external high availability; Ingress if you want HTTP routing and path-based traffic management; Service LoadBalancer is simple but can be expensive at scale.
 
@@ -121,17 +188,15 @@ Summary: Use cloud LB if you need external high availability; Ingress if you wan
 
 A Service Mesh like Istio manages internal pod-to-pod traffic and provides fine-grained control over requests.
 
-    Traditional Load Balancers and Ingress only operate at service boundaries.
+Traditional Load Balancers and Ingress only operate at service boundaries.
 
-    Service Mesh can:
-        Split traffic by percentage, headers, or cookies.
-        Handle retries, timeouts, and circuit breaking.
-        Provide observability with metrics, logs, and tracing.
+Service Mesh can:
+        - Split traffic by percentage, headers, or cookies.
+        - Handle retries, timeouts, and circuit breaking.
+        - Provide observability with metrics, logs, and tracing.
 
 Why it’s preferred for advanced deployments like Canary:
 
-    Canary rollouts often require precise traffic percentages and gradual shifting.
-    Istio or other service meshes let you incrementally route traffic without creating multiple Ingress resources.
-    You can also integrate with monitoring to automate rollback if errors spike.
+Canary rollouts often require precise traffic percentages and gradual shifting. Istio or other service meshes let you incrementally route traffic without creating multiple Ingress resources. You can also integrate with monitoring to automate rollback if errors spike.
 
 In short, Service Mesh gives you control, observability, and safety that standard LoadBalancers or Ingress can’t easily provide.
