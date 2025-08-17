@@ -9,7 +9,7 @@ metadata:
 spec:
   ingressClassName: nginx
   rules:
-    - host: app.local 
+    - host: canary.local 
       http:
         paths:
           - path: /
