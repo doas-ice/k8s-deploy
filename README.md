@@ -12,11 +12,11 @@ Ingress is used to expose the application outside the cluster with a single entr
 
 # 🔗 Links
 ```
-    GitHub Repo: 🔗 k8s-deploy
-    Docker Hub Image(s): 🔗 aureri/node-deployment-app
-    Dockerfile: Dockerfile
-    Kubernetes Manifests: k8s/
-    ArgoCD Definitions: argocd/
+    GitHub Repo: 🔗 [k8s-deploy](https://github.com/doas-ice/k8s-deploy)
+    Docker Hub Image(s): 🔗 [aureri/node-deployment-app](https://hub.docker.com/r/aureri/node-deployment-app)
+    Dockerfile: [Dockerfile](./Dockerfile)
+    Kubernetes Manifests: [k8s/](./k8s/)
+    ArgoCD Definitions: [argocd/](./k8s/argocd/)
 ```
 
 # Repository Structure
