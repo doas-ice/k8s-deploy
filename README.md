@@ -1,19 +1,26 @@
-Kubernetes Deployment Strategies with Argo CD
-Project Overview
+# Kubernetes Deployment Strategies with Argo CD  
 
+
+## Project Overview  
+
+ 
 This project demonstrates containerizing a Node.js application, pushing it to Docker Hub, and deploying it on a Kubernetes cluster using three deployment strategies — Blue-Green, Rolling Update, and Canary — managed by Argo CD.
 
 Ingress is used to expose the application outside the cluster with a single entry point, enabling browser access without manual kubectl port-forward.
-🔗 Links
 
+---
+
+# 🔗 Links
+```
     GitHub Repo: 🔗 k8s-deploy
     Docker Hub Image(s): 🔗 aureri/node-deployment-app
     Dockerfile: Dockerfile
     Kubernetes Manifests: k8s/
     ArgoCD Definitions: argocd/
+```
 
-Repository Structure
-
+# Repository Structure
+```
 ├── Dockerfile
 ├── blue-green/
 │   ├── deployment-blue.yaml
@@ -35,15 +42,16 @@ Repository Structure
     ├── app-blue-green.yaml
     ├── app-rolling.yaml
     └── app-canary.yaml
-
-Screenshots
+```
+# Screenshots
 
     Argo CD dashboard showing all three strategies
     Running pods for each strategy (kubectl get pods)
     Application in browser before and after update
 
-Assignment Questions & Answers
-Q1. Explain the difference between a Kubernetes Service, an Ingress controller (e.g., NGINX Ingress), and a cloud provider’s load balancer (e.g., AWS ELB). Why do Kubernetes clusters often use multiple layers of load balancing instead of just one?
+# Assignment Questions & Answers
+
+## Q1. Explain the difference between a Kubernetes Service, an Ingress controller (e.g., NGINX Ingress), and a cloud provider’s load balancer (e.g., AWS ELB). Why do Kubernetes clusters often use multiple layers of load balancing instead of just one?
 
     Kubernetes Service: A Service is an abstraction that defines a logical set of Pods and a policy to access them. It provides internal load balancing within the cluster and a stable IP/hostname for the Pods. For example, a Service ensures that if Pods are recreated or scaled up/down, other components can still reach the application reliably.
 
@@ -58,7 +66,9 @@ Why multiple layers? Kubernetes often uses a stacked approach: Cloud LB → Ingr
     Service balances traffic internally across Pods.
 
 This separation allows flexibility, scalability, security, and observability, instead of relying on a single monolithic load balancer.
-Q2. In a microservices architecture running on Kubernetes, why might you choose to use an Ingress controller like NGINX instead of exposing every Service with a LoadBalancer type service? Discuss benefits and potential drawbacks.
+
+
+## Q2. In a microservices architecture running on Kubernetes, why might you choose to use an Ingress controller like NGINX instead of exposing every Service with a LoadBalancer type service? Discuss benefits and potential drawbacks.
 
 In a microservices architecture, exposing every Service as a LoadBalancer can quickly become expensive and hard to manage, because most cloud providers create a dedicated external LB per Service.
 
@@ -75,7 +85,9 @@ Drawbacks / considerations:
     Some features, like advanced traffic splitting by percentage, require additional tools (NGINX annotations, Service Mesh, or Argo Rollouts).
 
 Overall, Ingress is preferred when you have many services and want centralized traffic control.
-Q3. Describe how Blue-Green and Canary deployment strategies influence traffic routing and load balancing within Kubernetes. Why can’t you simply rely on Kubernetes Services for sophisticated traffic splitting required by Canary deployments?
+
+
+## Q3. Describe how Blue-Green and Canary deployment strategies influence traffic routing and load balancing within Kubernetes. Why can’t you simply rely on Kubernetes Services for sophisticated traffic splitting required by Canary deployments?
 
     Blue-Green Deployment: You maintain two identical environments — Blue (current) and Green (new). All traffic is routed to Blue initially. When Green is ready, you switch 100% of traffic to Green by updating the Service or Ingress.
         Pros: Instant rollback is simple; traffic is fully isolated.
@@ -86,7 +98,9 @@ Q3. Describe how Blue-Green and Canary deployment strategies influence traffic r
         Cons: Requires precise traffic routing and observability.
 
 Why Services alone are not enough for Canary: Kubernetes Services do evenly distribute traffic across all pods. They cannot split traffic by percentage or target only a subset of pods. Canary releases need either Ingress annotations or a Service Mesh to direct specific percentages of traffic to the new version.
-Q4. What are the advantages and disadvantages of using a cloud provider’s load balancer (such as AWS ELB/ALB) directly in front of Kubernetes clusters compared to using an Ingress controller or Service of type LoadBalancer?
+
+
+## Q4. What are the advantages and disadvantages of using a cloud provider’s load balancer (such as AWS ELB/ALB) directly in front of Kubernetes clusters compared to using an Ingress controller or Service of type LoadBalancer?
 
     Cloud Load Balancer (AWS ELB/ALB)
         Pros: Managed, reliable, globally distributed, integrates with cloud networking.
@@ -101,7 +115,9 @@ Q4. What are the advantages and disadvantages of using a cloud provider’s load
         Cons: Creates one LB per service → can get costly; limited routing rules.
 
 Summary: Use cloud LB if you need external high availability; Ingress if you want HTTP routing and path-based traffic management; Service LoadBalancer is simple but can be expensive at scale.
-Q5. In a Kubernetes cluster, explain the role of the Service mesh (e.g., Istio) in managing traffic compared to traditional Load Balancers and Ingress controllers. Why might a Service mesh be preferred for advanced deployment strategies such as Canary rollouts?
+
+
+## Q5. In a Kubernetes cluster, explain the role of the Service mesh (e.g., Istio) in managing traffic compared to traditional Load Balancers and Ingress controllers. Why might a Service mesh be preferred for advanced deployment strategies such as Canary rollouts?
 
 A Service Mesh like Istio manages internal pod-to-pod traffic and provides fine-grained control over requests.
 
