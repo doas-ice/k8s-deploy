@@ -23,7 +23,7 @@ spec:
     spec:
       containers:
         - name: app
-          image: docker.io/aureri/node-deployment-app:1.0.0
+          image: docker.io/aureri/node-deployment-app:1.1.0
           imagePullPolicy: Always
           ports:
             - containerPort: 3000
