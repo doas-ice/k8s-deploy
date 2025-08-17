@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: k8s-deploy-svc
+spec:
+  selector:
+    app: k8s-deploy    # includes both stable & canary pods
+  ports:
+    - name: http
+      port: 80
+      targetPort: 3000
+

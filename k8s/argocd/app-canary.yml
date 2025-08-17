@@ -1,0 +1,19 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: k8s-deploy-canary
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/doas-ice/k8s-deploy
+    targetRevision: HEAD
+    path: k8s/canary
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: k8s-deploy-canary
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+

@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: k8s-deploy-rolling
+  labels:
+    app: k8s-deploy
+spec:
+  replicas: 3
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  selector:
+    matchLabels:
+      app: k8s-deploy
+      tier: rolling
+  template:
+    metadata:
+      labels:
+        app: k8s-deploy
+        tier: rolling
+    spec:
+      containers:
+        - name: app
+          image: docker.io/aureri/node-deployment-app:1.0.0
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 3000
+          readinessProbe:
+            httpGet: { path: "/", port: 3000 }
+            initialDelaySeconds: 2
+            periodSeconds: 5
+          livenessProbe:
+            httpGet: { path: "/api", port: 3000 }
+            initialDelaySeconds: 5
+            periodSeconds: 10
+

@@ -1,0 +1,19 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: k8s-deploy-blue-green
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/doas-ice/k8s-deploy
+    targetRevision: HEAD
+    path: k8s/blue-green
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: k8s-deploy-blue-green
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+
